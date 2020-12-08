@@ -65,3 +65,22 @@ margin: 1rem;
 .inputButton:hover {
     background-color: rgb(34, 34, 252);
 }
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 1rem;
+}
+.item {
+    padding: 0.2rem;
+    margin-bottom: .5rem;
+    border-bottom: 4px solid #fff;
+    line-height: 1.5rem;
+    font-size: 1rem;
+    
+}
+.item_input {
+    width: 23rem;
+}

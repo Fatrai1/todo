@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules\font-awesome\css\font-awesome.min.css">
     <link rel="stylesheet" href="/css/todo.css">
     <title>ToDo</title>
 </head>
 <body>
     <main class="wrapper">
         <header class="head">
-            <div class="day">
-                <p id="demo">Szombat</p>
-            </div>
-            <div class="date">
-                <p id="date">05-23-2020</p>
-            </div>
+           <h2 class="day">szombat</h2>
+           <h2 class="date">2020-12-1</h2>
+           <form class="input-box">
+               <input class="input" type="text" placeholder="Take the garbage out">
+               <button class="inputButton" type="submit"><i class="fa fa-plus"></i></button>
+           </form>
         </header>
-        <div class="input_div">
-            <input class="input" type="text" placeholder="Take the garbage out">
-            <button class="inputButton"><i class="fas fa-plus"></i>+</button>
-        </div>
-        <div class="container">
-            
-        </div>
+        <p>You have <span class="pending-item"></span> pending items</p>
+        
+        <div class="todo-container"></div>
+        <div class="completed-todos"></div>
+               
+        <footer class='footer'>
+            <button class="completed_btn">Show complete</button>
+            <button class="clear_btn">Clear All</button>
+
+        </footer>
     </main>
     <script src="/js/todo.js"></script>
 </body>

@@ -1,3 +1,14 @@
+const date = document.querySelector('.date');
+const input = document.querySelector('.input');
+const inputBox = document.querySelector('.input-box');
+const pendingItem = document.querySelector('.pending-item');
+const todos = document.querySelector('.todo-container');
+const completedTodos = document.querySelector('.completed-todos');
+const completed = document.querySelector('.completed_btn');
+const clear = document.querySelector('.clear_btn');
+let todos = [];
+
+
 (function () {
     const day = new Date();
     const weekday = new Array();
@@ -10,20 +21,28 @@
     weekday[6] = "Szombat";
   
     const nap = weekday[day.getDay()];
-    document.getElementById("demo").innerHTML = nap;
+    document.querySelector(".day").textContent = nap;
   })();
-  (function () {
-      const currentDate = new Date();
-      let day = currentDate.getDate();
-      let mounth = currentDate.getMonth() + 1;
-      let year = currentDate.getFullYear();
-    document.getElementById('date').textContent = `${day}-${mounth}-${year}`;
-  })();
+  //    Ez a napra egy maibb megoldás, de és magyar nenekkel akartam megoldani
+//   const day = document.querySelector('.day');
+//   day.textContent = new Date().toLocaleDateString('en', { weekday: 'long' });
+
+  //    Dátum megjelenítése
+  date.textContent = new Date().toLocaleDateString('en-US').replaceAll('/', '-');
+
+  //        Egy régebbi megoldás
+
+//   (function () {
+//       const currentDate = new Date();
+//       let day = currentDate.getDate();
+//       let mounth = currentDate.getMonth() + 1;
+//       let year = currentDate.getFullYear();
+//     document.querySelector('.date').textContent = `${day}-${mounth}-${year}`;
+//   })();
 
 
-  const addButton = document.querySelector('.inputButton');
-let input = document.querySelector('.input');
-const container = document.querySelector('.container');
+    const addButton = document.querySelector('.inputButton');
+    const container = document.querySelector('.container');
 
 class item {
     constructor(itemName) {
@@ -31,33 +50,36 @@ class item {
     }
 
     createDiv(itemName) {
-        let input = document.createElement('input');
+        const itemBox = document.createElement('div');
+        itemBox.classList.add('item');
+        
+
+        const checkbox = document.createElement('input');
+        checkbox.disabled = true;
+        checkbox.type = 'checkbox'; 
+        checkbox.classList.add('checkbox');
+
+        const input = document.createElement('input');
         input.value = itemName;
         input.disabled = true;
         input.classList.add('item_input');
         input.type = "text";
         
 
-        let itemBox = document.createElement('div');
-        itemBox.classList.add('item');
-
-        let removeButton = document.createElement('button');
+        const removeButton = document.createElement('button');
         removeButton.innerHTML = "X";
         removeButton.classList.add('removeButton');
 
         container.appendChild(itemBox);
 
+        itemBox.appendChild(checkbox);
         itemBox.appendChild(input);
-        
         itemBox.appendChild(removeButton);
 
-        editButton.addEventListener('click', () => this.edit(input));
         removeButton.addEventListener('click', () => this.remove(itemBox));
     }
 
-    edit(input) {
-        input.disabled = !input.disabled;
-    }
+    
     remove(item){
         container.removeChild(item);
     }

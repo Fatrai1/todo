@@ -3,31 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="node_modules\font-awesome\css\font-awesome.min.css">
     <link rel="stylesheet" href="/css/todo.css">
-    <title>ToDo</title>
+    <title>Document</title>
 </head>
 <body>
-    <main class="wrapper">
-        <header class="head">
-           <h2 class="day">szombat</h2>
-           <h2 class="date">2020-12-1</h2>
-           <form class="input-box">
-               <input class="input" type="text" placeholder="Take the garbage out">
-               <button class="inputButton" type="submit"><i class="fa fa-plus"></i></button>
-           </form>
-        </header>
-        <p>You have <span class="pending-item"></span> pending items</p>
+    <div class="main-container">
+        <h2 class="day">szombat</h2>
+        <h2 class="date">2020-12-1</h2>
+        <div class="actual-date">Aktuális dátum</div>
+        <input type="text" name="todo-input" class="todo-input" placeholder="Írd be a cuccokat">
+        <button class="add-todo">+</button>
+        <div class="todo-counter">
+            You have <span class = 'counter'>0</span> pending items.
+        </div>
         
-        <div class="todo-container"></div>
-        <div class="completed-todos"></div>
+        <div class="container todo-container"></div>
                
-        <footer class='footer'>
-            <button class="completed_btn">Show complete</button>
-            <button class="clear_btn">Clear All</button>
-
-        </footer>
-    </main>
+        <div class="container completed-container"></div>
+        
+        <div class="container footer-container"></div>
+    </div>
+    
     <script src="/js/todo.js"></script>
 </body>
 </html>

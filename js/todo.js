@@ -1,12 +1,12 @@
+'use strict'
 const date = document.querySelector('.date');
-const input = document.querySelector('.input');
-const inputBox = document.querySelector('.input-box');
-const pendingItem = document.querySelector('.pending-item');
-const todos = document.querySelector('.todo-container');
-const completedTodos = document.querySelector('.completed-todos');
-const completed = document.querySelector('.completed_btn');
-const clear = document.querySelector('.clear_btn');
-let todos = [];
+const todoInput = document.querySelector('.todo-input');
+const addTodoButton = document.querySelector('.add-todo');
+const todoContainer = document.querySelector('.todo-container');
+const completedContainer = document.querySelector('.completed-container');
+const todoCounterHolder = document.querySelector('.counter'); 
+let todoCounter = 0;
+let storageId = 1;
 
 
 (function () {
@@ -38,66 +38,81 @@ let todos = [];
 //       let mounth = currentDate.getMonth() + 1;
 //       let year = currentDate.getFullYear();
 //     document.querySelector('.date').textContent = `${day}-${mounth}-${year}`;
-//   })();
 
 
-    const addButton = document.querySelector('.inputButton');
-    const container = document.querySelector('.container');
-
-class item {
-    constructor(itemName) {
-        this.createDiv(itemName);
+const counterUpdate = (direction) =>{
+    if(direction){
+        todoCounter += 1;
+    }else {
+        todoCounter -=1;
     }
-
-    createDiv(itemName) {
-        const itemBox = document.createElement('div');
-        itemBox.classList.add('item');
-        
-
-        const checkbox = document.createElement('input');
-        checkbox.disabled = true;
-        checkbox.type = 'checkbox'; 
-        checkbox.classList.add('checkbox');
-
-        const input = document.createElement('input');
-        input.value = itemName;
-        input.disabled = true;
-        input.classList.add('item_input');
-        input.type = "text";
-        
-
-        const removeButton = document.createElement('button');
-        removeButton.innerHTML = "X";
-        removeButton.classList.add('removeButton');
-
-        container.appendChild(itemBox);
-
-        itemBox.appendChild(checkbox);
-        itemBox.appendChild(input);
-        itemBox.appendChild(removeButton);
-
-        removeButton.addEventListener('click', () => this.remove(itemBox));
-    }
-
-    
-    remove(item){
-        container.removeChild(item);
-    }
-}
+    todoCounterHolder.textContent = todoCounter;
+};
 
 
-function check(){
-    if (input.value != ""){
-        new item(input.value);
-        input.value = "";
-    }
+// Elem törlése a szülő elem megkeresésével és a remove() függvény meghívásával 
+const deleteStorage = (id) => {
+    document.querySelector(`[data-id ="${id}"]`).parentElement.remove();
+    localStorage.removeItem(id);
+    counterUpdate(false);
+};
+const todoCompleted = (id) => {
+    let valueString = localStorage.getItem(id);
+    valueString = valueString.replace('"state":1','"state":2');
+    localStorage.setItem(id, valueString);
+    const targetTodo = document.querySelector(`[data-setid ="${id}"]`).parentElement;
+    targetTodo.remove();
+    completedContainer.insertBefore(targetTodo, completedContainer.firstChild);
+    counterUpdate(false);
+};
 
-}
+const addDeleteEventListener = (id) => document.querySelector(`[data-id ="${id}"]`).addEventListener('click', () => deleteStorage(id));
+const addSetEventListener = (id) => document.querySelector(`[data-setid ="${id}"]`).addEventListener('click', () => todoCompleted(id));
 
 
-addButton.addEventListener('click', check);
-window.addEventListener('keydown', (e) => {
-    if(e.which == 13){
-        check();
-    }
-})
+const createTodo = (text, id, state) => {
+        let isChecked = '';
+        let parentContainer = todoContainer;
+        const todoItem = document.createElement('div');
+        todoItem.classList.add('todo-item');
+        if (parseInt(state) === 2 ) {
+            parentContainer = completedContainer;
+            isChecked = 'disabled checked';
+        }else {
+            counterUpdate(true);
+        }
+            
+       
+        todoItem.innerHTML = `<input type="checkbox" ${isChecked} name="set-complated" class=".set-complated" id="" data-setid ="${id}"> ${text} <button class ='delete-button' data-id = '${id}'>X</button>`; 
+        parentContainer.insertBefore(todoItem, parentContainer.firstChild);
+};
+
+const addTodo = () => {
+    if (!todoInput.value) {
+        alert('Kérlek írj be egy feladatot!');
+    } else {        
+        createTodo(todoInput.value, storageId, 1);
+        localStorage.setItem(storageId.toString(), JSON.stringify(
+            {
+                todo: todoInput.value,
+                state: 1,  //1, ha aktív a feladat, 2, ha inaktív
+            }
+        ));
+        addDeleteEventListener(storageId);
+        addSetEventListener(storageId);
+        todoInput.value = '';
+        storageId += 1;
+    }  
+};
+// Az oldal betöltésekor megnézzük a localStorage-t.
+Object.keys(localStorage).forEach((key) => {
+    const obj = JSON.parse(localStorage.getItem(key));
+
+    createTodo(obj.todo, key, obj.state);
+    addDeleteEventListener(key);
+    addSetEventListener(key);
+    if(parseInt(key) >= storageId) storageId = parseInt(key) + 1;
+});
+
+const addTodoClickListener = () => addTodoButton.addEventListener('click', addTodo);
+addTodoClickListener();
